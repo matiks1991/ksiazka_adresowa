@@ -1,0 +1,4 @@
+1|Mateusz|Broniszewski|123456789|mateusz@broniszewski.com|Najlepsza 21; 61-530 Poznan|
+2|Tomasz|Nowak|12354654|toja@nieja.pl|Wspolna 3/23; 61-532 Poznan|
+3|Agnieszka|Nowak-Kapturska|123456789|aga@nowak.pl|Polna 6; 22-860 Warszawa|
+4|ada|fsda|fdas|fsda|fdg fdg df gd 6|

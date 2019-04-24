@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1553861149 source:d:\dokumenty\programowanie\przyszlyprogramista\seminaria\sem014_wdrazamy_struktury_danych_do_ksiazki_adresowej\001_ksiazkaadresowa\main.cpp
+	<iostream>
+	<fstream>
+	<windows.h>
+	<sstream>
+	<vector>
+	<algorithm>
+
