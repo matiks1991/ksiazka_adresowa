@@ -1,0 +1,10 @@
+2|1|baba|b|b|b|b|
+3|3|w|w|w|w|w|
+5|1|test|a|a|a|auschwitz|
+7|1|artur||a|a|dsf|
+8|1|asd|sda||saf|saf|
+9|1|dfs|ds|cvsd|fds|cfs|
+10|2|fds|df|fs|df|sf|
+11|2|a|as||sds|sd|
+12|1|dsf|fd|df|fd|df|
+13|1|Stefanek|Kokod¾amb¤|sAD|df|df|

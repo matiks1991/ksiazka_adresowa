@@ -7,3 +7,15 @@
 	<vector>
 	<algorithm>
 
+<<<<<<< HEAD
+1558909453 source:d:\dokumenty\programowanie\przyszlyprogramista\seminaria\sem015_twoj_nowy_kolega_git\001_ksiazkaadresowa\main.cpp
+=======
+1558903054 source:d:\dokumenty\programowanie\przyszlyprogramista\seminaria\sem015_twoj_nowy_kolega_git\001_ksiazkaadresowa\main.cpp
+>>>>>>> master
+	<iostream>
+	<fstream>
+	<windows.h>
+	<sstream>
+	<vector>
+	<algorithm>
+

@@ -7,213 +7,31 @@
 
 using namespace std;
 
-struct Friend
+string loadLine()
+{
+    string input = "";
+    getline(cin, input);
+    return input;
+}
+
+struct User
 {
     int id = 0;
-    string firstName = "", lastName = "", phoneNumber = "", address = "", email = "";
+    string name = "", password = "";
 };
 
-void downloadDataFromFile(vector<Friend> &friends)
+void overwriteFileUsers(vector<User> &users)
 {
-    string line;
-    int numberOfLine = 1;
-    Friend templateFriend;
-
     fstream file;
-    file.open("KsiazkaAdresowa.txt", ios::in);
+    file.open( "Uzytkownicy.txt", ios::out | ios::trunc );
 
     if(file.good() == true)
     {
-        while (getline(file,line,'|'))
+        for(int i=0; i<users.size(); i++)
         {
-            switch (numberOfLine)
-            {
-            case 1:
-                templateFriend.id = atoi(line.c_str());
-                break;
-            case 2:
-                templateFriend.firstName = line;
-                break;
-            case 3:
-                templateFriend.lastName = line;
-                break;
-            case 4:
-                templateFriend.phoneNumber = line;
-                break;
-            case 5:
-                templateFriend.email = line;
-                break;
-            case 6:
-                templateFriend.address = line;
-                break;
-            }
-            if (numberOfLine >= 6)
-            {
-                friends.push_back(templateFriend);
-                numberOfLine = 1;
-            }
-            else
-            {
-                numberOfLine++;
-            }
-        }
-        file.close();
-    }
-    else
-    {
-        cout << "Nie udalo sie wczytac pliku!" << endl;
-        system("pause");
-    }
-}
-
-void addFriend(vector<Friend> &friends)
-{
-    Friend templateFriend;
-
-    system("cls");
-
-    cin.ignore();
-    cout << "Podaj imie: ";
-    getline(cin, templateFriend.firstName, '\n');
-    cout << "Podaj nazwisko: ";
-    getline(cin, templateFriend.lastName, '\n');
-    cout << "Podaj numer telefonu: ";
-    getline(cin, templateFriend.phoneNumber, '\n');
-    cout << "Podaj email: ";
-    getline(cin, templateFriend.email, '\n');
-    cout << "Podaj adres: ";
-    getline(cin, templateFriend.address, '\n');
-
-    if(friends.size() == 0)
-    {
-        templateFriend.id = 1;
-    }
-    else
-    {
-        templateFriend.id = friends[friends.size()-1].id + 1;
-    }
-
-    friends.push_back(templateFriend);
-
-    fstream file;
-    file.open("KsiazkaAdresowa.txt", ios::app);
-
-    if(file.good() == true)
-    {
-        file << templateFriend.id << "|";
-        file << templateFriend.firstName << "|";
-        file << templateFriend.lastName << "|";
-        file << templateFriend.phoneNumber << "|";
-        file << templateFriend.email << "|";
-        file << templateFriend.address << "|"  << endl;
-
-        file.close();
-
-        cout << "Dodano adresata." << endl;
-    }
-    else
-    {
-        cout << "Nie udalo sie zapisac adresata!" << endl;
-    }
-
-    Sleep(1500);
-}
-
-void displayAllFriendsDetails(vector<Friend> friends)
-{
-    system("cls");
-
-    if(friends.size() > 0)
-    {
-        for(int i = 0; i<friends.size(); i++)
-        {
-            cout << "Id:                " << friends[i].id << endl;
-            cout << "Imie:              " << friends[i].firstName << endl;
-            cout << "Nazwisko:          " << friends[i].lastName << endl;
-            cout << "Numer telefonu:    " << friends[i].phoneNumber << endl;
-            cout << "Email:             " << friends[i].email << endl;
-            cout << "Adres:             " << friends[i].address  << endl << endl;
-        }
-    }
-    else
-        cout << "Nie dodano jeszcze przyjaciol do ksiazki adresowej!" << endl;
-
-    system("pause");
-}
-
-
-void searchAfterTheFirstName(vector<Friend> friends)
-{
-    int numberFound = 0;
-    string searchedName;
-
-    system("cls");
-
-    cout << "Podaj imie adresata: ";
-    cin >> searchedName;
-    cout << endl;
-
-    for(int i = 0; i < friends.size(); i++)
-    {
-        if(friends[i].firstName == searchedName)
-        {
-            cout << "Id: " << friends[i].id << endl;
-            cout << "Imie: " << friends[i].firstName << endl;
-            cout << "Nazwisko: " << friends[i].lastName << endl;
-            cout << "Numer telefonu: " << friends[i].phoneNumber << endl;
-            cout << "Email: " << friends[i].email << endl;
-            cout << "Adres: " << friends[i].address  << endl << endl;
-            numberFound++;
-        }
-    }
-
-    cout << "Liczba znalezionych przyjaciol o danym imieniu: " << numberFound << endl;
-    system("pause");
-}
-
-void searchAfterTheLastName(vector<Friend> friends)
-{
-    int numberFound = 0;
-    string searchedName;
-
-    system("cls");
-
-    cout << "Podaj nazwisko adresata: ";
-    cin >> searchedName;
-    cout << endl;
-
-    for(int i = 0; i < friends.size(); i++)
-    {
-        if(friends[i].lastName == searchedName)
-        {
-            cout << "Id: " << friends[i].id << endl;
-            cout << "Imie: " << friends[i].firstName << endl;
-            cout << "Nazwisko: " << friends[i].lastName << endl;
-            cout << "Numer telefonu: " << friends[i].phoneNumber << endl;
-            cout << "Email: " << friends[i].email << endl;
-            cout << "Adres: " << friends[i].address  << endl << endl;
-            numberFound++;
-        }
-    }
-    cout << "Liczba znalezionych przyjaciol o danym nazwisku: " << numberFound << endl;
-    system("pause");
-}
-
-void overwriteFile(vector<Friend> &friends)
-{
-    fstream file;
-    file.open( "KsiazkaAdresowa.txt", ios::out | ios::trunc );
-
-    if(file.good() == true)
-    {
-        for(int i = 0; i < friends.size(); i++)
-        {
-            file << friends[i].id << "|";
-            file << friends[i].firstName << "|";
-            file << friends[i].lastName << "|";
-            file << friends[i].phoneNumber << "|";
-            file << friends[i].email << "|";
-            file << friends[i].address << "|"  << endl;
+            file << users[i].id << "|";
+            file << users[i].name << "|";
+            file << users[i].password << "|"  << endl;
         }
         file.close();
 
@@ -227,32 +45,464 @@ void overwriteFile(vector<Friend> &friends)
     }
 }
 
-void deleteFriend(vector<Friend> &friends)
+void registration(vector<User> &users)
 {
-    int idAddressee;
+    string name, password;
+    User templateUser;
+
+    cout << "Podaj nazwe uzytkownika: " << endl;
+    cin >> name;
+
+    int i = 0;
+    while(i < users.size())
+    {
+        if(users[i].name == name)
+        {
+            cout << "Taki uzytkownik istnieje. Wpisz inna nazwe uzytkownika.";
+            cin >> name;
+            i = 0;
+        }
+        else
+        {
+            i++;
+        }
+    }
+    cout << "Podaj haslo: ";
+    cin >> password;
+
+    templateUser.name = name;
+    templateUser.password = password;
+    templateUser.id = users.size()+1;
+    users.push_back(templateUser);
+
+    fstream file;
+    file.open("Uzytkownicy.txt", ios::app);
+
+    if(file.good() == true)
+    {
+        file << templateUser.id << "|";
+        file << templateUser.name << "|";
+        file << templateUser.password << "|"  << endl;
+
+        file.close();
+
+        cout << "Konto zalozone." << endl;
+    }
+    else
+    {
+        cout << "Nie udalo sie dodac konta!" << endl;
+    }
+
+    Sleep(1500);
+}
+
+int login(vector<User> &users)
+{
+    string name, password;
+    int numberOfLine = 1;
+
+    cout << "Podaj login: ";
+    cin >> name;
+
+    for(int i = 0; i < users.size(); i++)
+    {
+        if(users[i].name == name)
+        {
+            for (int proby = 0; proby < 3; proby++)
+            {
+                cout << "Podaj haslo. Pozostalo prob " << 3-proby << ": ";
+                cin >> password;
+                if (users[i].password == password)
+                {
+                    cout << "Zalogowales sie." << endl;
+                    Sleep(500);
+                    return users[i].id;
+                }
+            }
+            cout << "Podales 3 razy bledna haslo. Poczekaj 3 sekundy przed kolejna proba" << endl;
+            Sleep(3000);
+            return 0;
+        }
+    }
+    cout << "Nie ma uzytkownika z takim loginem" << endl;
+    Sleep(1000);
+    return 0;
+}
+
+void passwordChange(vector<User> &users, int idLoggedInUser)
+{
+    string password;
+    cout << "Podaj nowe haslo: ";
+    cin >> password;
+
+
+    for(int i=0; i<users.size(); i++)
+    {
+        if(users[i].id == idLoggedInUser)
+        {
+            users[i].password = password;
+        }
+    }
+
+    overwriteFileUsers(users);
+}
+
+string changeFirstLetterToUpperAndRestToLower(string text)
+{
+    if (!text.empty())
+    {
+        transform(text.begin(), text.end(), text.begin(), ::tolower);
+        text[0] = toupper(text[0]);
+    }
+    return text;
+}
+
+void downloadDataOfUsersFromFile(vector<User> &users)
+{
+    string line;
+    int numberOfLine = 1;
+    User templateUser;
+
+    fstream file;
+    file.open("Uzytkownicy.txt", ios::in);
+
+    if(file.good() == true)
+    {
+        while (getline(file,line,'|'))
+        {
+            switch (numberOfLine)
+            {
+            case 1:
+                templateUser.id = atoi(line.c_str());
+                break;
+            case 2:
+                templateUser.name = line;
+                break;
+            case 3:
+                templateUser.password = line;
+                break;
+            }
+            if (numberOfLine >= 3)
+            {
+                numberOfLine = 1;
+                users.push_back(templateUser);
+            }
+            else
+            {
+                numberOfLine++;
+            }
+        }
+        file.close();
+    }
+    else
+    {
+        cout << "Nie udalo sie wczytac pliku uzytkownikow!" << endl;
+        system("pause");
+    }
+}
+
+struct Recipient
+{
+    int idRecipient = 0, idUser = 0;
+    string firstName = "", lastName = "", phoneNumber = "", email = "", address = "";
+};
+
+vector<Recipient> downloadDataOfRecipientsFromFile(int &idLoggedInUser, int &idLastRecipient)
+{
+    vector<Recipient> recipients;
+    string line;
+    int numberOfLine = 1;
+    Recipient templateRecipient;
+
+    fstream file;
+    file.open("Adresaci.txt", ios::in);
+
+    if(file.good() == true)
+    {
+        while (getline(file,line,'|'))
+        {
+            switch (numberOfLine)
+            {
+            case 1:
+                templateRecipient.idRecipient = atoi(line.c_str());
+                break;
+            case 2:
+                templateRecipient.idUser = atoi(line.c_str());
+                break;
+            case 3:
+                templateRecipient.firstName = line;
+                break;
+            case 4:
+                templateRecipient.lastName = line;
+                break;
+            case 5:
+                templateRecipient.phoneNumber = line;
+                break;
+            case 6:
+                templateRecipient.email = line;
+                break;
+            case 7:
+                templateRecipient.address = line;
+                break;
+            }
+
+            if (numberOfLine >= 7)
+            {
+                numberOfLine = 1;
+                idLastRecipient = templateRecipient.idRecipient;
+                if(templateRecipient.idUser == idLoggedInUser)
+                    recipients.push_back(templateRecipient);
+            }
+            else
+            {
+                numberOfLine++;
+            }
+        }
+        file.close();
+    }
+    else
+    {
+        cout << "Nie udalo sie wczytac pliku!" << endl;
+        system("pause");
+    }
+
+    return recipients;
+}
+
+int addRecipient(vector<Recipient> &recipients, int idLoggedInUser, int idLastRecipient)
+{
+    Recipient templateRecipient;
+
+    system("cls");
+
+    cin.ignore();
+    cout << "Podaj imie: ";
+    templateRecipient.firstName = loadLine();
+    templateRecipient.firstName = changeFirstLetterToUpperAndRestToLower(templateRecipient.firstName);
+    cout << "Podaj nazwisko: ";
+    templateRecipient.lastName = loadLine();
+    templateRecipient.lastName = changeFirstLetterToUpperAndRestToLower(templateRecipient.lastName);
+    cout << "Podaj numer telefonu: ";
+    templateRecipient.phoneNumber = loadLine();
+    cout << "Podaj email: ";
+    templateRecipient.email = loadLine();
+    cout << "Podaj adres: ";
+    templateRecipient.address = loadLine();
+
+    templateRecipient.idUser = idLoggedInUser;
+
+    templateRecipient.idRecipient = idLastRecipient + 1;
+
+    recipients.push_back(templateRecipient);
+
+    fstream file;
+    file.open("Adresaci.txt", ios::app);
+
+    if(file.good() == true)
+    {
+        file << templateRecipient.idRecipient << "|";
+        file << templateRecipient.idUser << "|";
+        file << templateRecipient.firstName << "|";
+        file << templateRecipient.lastName << "|";
+        file << templateRecipient.phoneNumber << "|";
+        file << templateRecipient.email << "|";
+        file << templateRecipient.address << "|"  << endl;
+
+        file.close();
+
+        idLastRecipient++;
+
+        cout << "Dodano adresata." << endl;
+    }
+    else
+    {
+        cout << "Nie udalo sie zapisac adresata!" << endl;
+    }
+
+    Sleep(1500);
+
+    return idLastRecipient;
+}
+
+void displayAllRecipientsDetails(vector<Recipient> recipients)
+{
+    system("cls");
+
+    if(recipients.size() > 0)
+    {
+        int i = 0;
+        while(i<recipients.size())
+        {
+            cout << "Id:                " << recipients[i].idRecipient << endl;
+            cout << "Imie:              " << recipients[i].firstName << endl;
+            cout << "Nazwisko:          " << recipients[i].lastName << endl;
+            cout << "Numer telefonu:    " << recipients[i].phoneNumber << endl;
+            cout << "Email:             " << recipients[i].email << endl;
+            cout << "Adres:             " << recipients[i].address  << endl << endl;
+            i++;
+        }
+    }
+    else
+        cout << "Nie dodano jeszcze przyjaciol do ksiazki adresowej!" << endl;
+
+    system("pause");
+}
+
+void searchAfterTheFirstName(vector<Recipient> recipients)
+{
+    int numberFound = 0;
+    string searchedName;
+
+    system("cls");
+
+    cout << "Podaj imie adresata: ";
+    cin >> searchedName;
+    cout << endl;
+
+    for(int i = 0; i < recipients.size(); i++)
+    {
+        if(recipients[i].firstName == searchedName)
+        {
+            cout << "Id: " << recipients[i].idRecipient << endl;
+            cout << "Imie: " << recipients[i].firstName << endl;
+            cout << "Nazwisko: " << recipients[i].lastName << endl;
+            cout << "Numer telefonu: " << recipients[i].phoneNumber << endl;
+            cout << "Email: " << recipients[i].email << endl;
+            cout << "Adres: " << recipients[i].address  << endl << endl;
+            numberFound++;
+        }
+    }
+
+    cout << "Liczba znalezionych adresatow o danym imieniu: " << numberFound << endl;
+    system("pause");
+}
+
+void searchAfterTheLastName(vector<Recipient> recipients)
+{
+    int numberFound = 0;
+    string searchedName;
+
+    system("cls");
+
+    cout << "Podaj nazwisko adresata: ";
+    cin >> searchedName;
+    cout << endl;
+
+    for(int i = 0; i < recipients.size(); i++)
+    {
+        if(recipients[i].lastName == searchedName)
+        {
+            cout << "Id: " << recipients[i].idRecipient << endl;
+            cout << "Imie: " << recipients[i].firstName << endl;
+            cout << "Nazwisko: " << recipients[i].lastName << endl;
+            cout << "Numer telefonu: " << recipients[i].phoneNumber << endl;
+            cout << "Email: " << recipients[i].email << endl;
+            cout << "Adres: " << recipients[i].address  << endl << endl;
+            numberFound++;
+        }
+    }
+    cout << "Liczba znalezionych adresatow o danym nazwisku: " << numberFound << endl;
+    system("pause");
+}
+
+void rewriteDataOfRecipientsWithoutDeleted(vector<Recipient> &recipients, int idEraseRecipient)
+{
+    string line;
+    int numberOfLine = 1;
+    Recipient templateRecipient;
+
+    fstream fileSource;
+    fileSource.open("Adresaci.txt", ios::in);
+
+    fstream fileTarget;
+    fileTarget.open("Adresaci_tymczasowy.txt", ios::out | ios::app);
+
+    if(fileSource.good() == true)
+    {
+        while (getline(fileSource,line,'|'))
+        {
+            switch (numberOfLine)
+            {
+            case 1:
+                templateRecipient.idRecipient = atoi(line.c_str());
+                break;
+            case 2:
+                templateRecipient.idUser = atoi(line.c_str());
+                break;
+            case 3:
+                templateRecipient.firstName = line;
+                break;
+            case 4:
+                templateRecipient.lastName = line;
+                break;
+            case 5:
+                templateRecipient.phoneNumber = line;
+                break;
+            case 6:
+                templateRecipient.email = line;
+                break;
+            case 7:
+                templateRecipient.address = line;
+                break;
+            }
+            if (numberOfLine >= 7)
+            {
+                numberOfLine = 1;
+
+                if(templateRecipient.idRecipient != idEraseRecipient)
+                {
+                    fileTarget << templateRecipient.idRecipient << "|";
+                    fileTarget << templateRecipient.idUser << "|";
+                    fileTarget << templateRecipient.firstName << "|";
+                    fileTarget << templateRecipient.lastName << "|";
+                    fileTarget << templateRecipient.phoneNumber << "|";
+                    fileTarget << templateRecipient.email << "|";
+                    fileTarget << templateRecipient.address << "|" << endl;
+                }
+            }
+            else
+            {
+                numberOfLine++;
+            }
+        }
+        fileTarget.close();
+        fileSource.close();
+        remove("Adresaci.txt");
+        rename("Adresaci_tymczasowy.txt", "Adresaci.txt");
+    }
+    else
+    {
+        cout << "Nie udalo sie wczytac pliku zrodlowego!" << endl;
+        system("pause");
+    }
+}
+
+void deleteRecipient(vector<Recipient> &recipients)
+{
+    int idRecipient;
     char choice;
-    bool ifThereIsAddressee = false;
+    bool ifThereIsRecipient = false;
 
     system("cls");
     cout << "Podaj id adresata: ";
-    cin >> idAddressee;
+    cin >> idRecipient;
 
-    for(int i = 0; i < friends.size(); i++)
+    for(int i = 0; i < recipients.size(); i++)
     {
-        if(friends[i].id == idAddressee)
+        if(recipients[i].idRecipient == idRecipient)
         {
             while(true)
             {
                 system("cls");
-                cout << "Czy na pewno chcesz usunac " << friends[i].firstName << " " << friends[i].lastName << "? (t/n)" << endl;
+                cout << "Czy na pewno chcesz usunac " << recipients[i].firstName << " " << recipients[i].lastName << "? (t/n)" << endl;
 
                 cin >> choice;
 
                 if(choice == 't')
                 {
-                    ifThereIsAddressee = true;
-                    friends.erase(friends.begin()+i);
-                    overwriteFile(friends);
+                    ifThereIsRecipient = true;
+                    recipients.erase(recipients.begin()+i);
+                    rewriteDataOfRecipientsWithoutDeleted(recipients, idRecipient);
                     break;
                 }
                 else if(choice == 'n')
@@ -263,7 +513,7 @@ void deleteFriend(vector<Friend> &friends)
             break;
         }
     }
-    if(ifThereIsAddressee == false)
+    if(ifThereIsRecipient == false)
     {
         cout << "Podany adresat nie istnieje!" << endl;
         system("pause");
@@ -271,60 +521,144 @@ void deleteFriend(vector<Friend> &friends)
 
 }
 
-void editInformationAboutFriend(vector<Friend> &friends, int idAddressee, int typeOfData)
+void rewriteDataOfRecipientsWithEdited(vector<Recipient> &recipients, Recipient editedRecipient)
+{
+    string line;
+    int numberOfLine = 1;
+    Recipient templateRecipient;
+
+    fstream fileSource;
+    fileSource.open("Adresaci.txt", ios::in);
+
+    fstream fileTarget;
+    fileTarget.open("Adresaci_tymczasowy.txt", ios::out | ios::app);
+
+    if(fileSource.good() == true)
+    {
+        while (getline(fileSource,line,'|'))
+        {
+            switch (numberOfLine)
+            {
+            case 1:
+                templateRecipient.idRecipient = atoi(line.c_str());
+                break;
+            case 2:
+                templateRecipient.idUser = atoi(line.c_str());
+                break;
+            case 3:
+                templateRecipient.firstName = line;
+                break;
+            case 4:
+                templateRecipient.lastName = line;
+                break;
+            case 5:
+                templateRecipient.phoneNumber = line;
+                break;
+            case 6:
+                templateRecipient.email = line;
+                break;
+            case 7:
+                templateRecipient.address = line;
+                break;
+            }
+            if (numberOfLine >= 7)
+            {
+                numberOfLine = 1;
+
+                if(templateRecipient.idRecipient != editedRecipient.idRecipient)
+                {
+                    fileTarget << templateRecipient.idRecipient << "|";
+                    fileTarget << templateRecipient.idUser << "|";
+                    fileTarget << templateRecipient.firstName << "|";
+                    fileTarget << templateRecipient.lastName << "|";
+                    fileTarget << templateRecipient.phoneNumber << "|";
+                    fileTarget << templateRecipient.email << "|";
+                    fileTarget << templateRecipient.address << "|" << endl;
+                }
+                else
+                {
+                    fileTarget << editedRecipient.idRecipient << "|";
+                    fileTarget << editedRecipient.idUser << "|";
+                    fileTarget << editedRecipient.firstName << "|";
+                    fileTarget << editedRecipient.lastName << "|";
+                    fileTarget << editedRecipient.phoneNumber << "|";
+                    fileTarget << editedRecipient.email << "|";
+                    fileTarget << editedRecipient.address << "|" << endl;
+                }
+            }
+            else
+            {
+                numberOfLine++;
+            }
+        }
+        fileTarget.close();
+        fileSource.close();
+        remove("Adresaci.txt");
+        rename("Adresaci_tymczasowy.txt", "Adresaci.txt");
+    }
+    else
+    {
+        cout << "Nie udalo sie wczytac pliku zrodlowego!" << endl;
+        system("pause");
+    }
+}
+
+void editInformationAboutRecipient(vector<Recipient> &recipients, int idRecipient, int typeOfData)
 {
     string newdata;
-    bool ifThereIsAddressee = false;
+    bool ifThereIsRecipient = false;
 
     system("cls");
     cout << "Zmien na: ";
     cin.ignore();
     getline(cin, newdata);
 
-    for(int i = 0; i < friends.size(); i++)
+    for(int i = 0; i < recipients.size(); i++)
     {
-        if(friends[i].id == idAddressee)
+        if(recipients[i].idRecipient == idRecipient)
         {
-            ifThereIsAddressee = true;
+            ifThereIsRecipient = true;
+
             switch(typeOfData)
             {
             case 1:
-                friends[i].firstName = newdata;
+                recipients[i].firstName = newdata;
                 break;
             case 2:
-                friends[i].lastName = newdata;
+                recipients[i].lastName = newdata;
                 break;
             case 3:
-                friends[i].phoneNumber = newdata;
+                recipients[i].phoneNumber = newdata;
                 break;
             case 4:
-                friends[i].email = newdata;
+                recipients[i].email = newdata;
                 break;
             case 5:
-                friends[i].address = newdata;
+                recipients[i].address = newdata;
                 break;
             }
-            overwriteFile(friends);
+            rewriteDataOfRecipientsWithEdited(recipients, recipients[i]);
             break;
         }
     }
-    if(ifThereIsAddressee == false)
+
+    if(ifThereIsRecipient == false)
     {
         cout << "Podany adresat nie istnieje!" << endl;
         system("pause");
     }
 }
 
-void editFriends(vector<Friend> &friends)
+void editRecipients(vector<Recipient> &recipients)
 {
     char choice;
-    int idAddressee;
+    int idRecipient;
 
-    if(!friends.empty())
+    if(!recipients.empty())
     {
         system("cls");
         cout << "Podaj id adresata: ";
-        cin >> idAddressee;
+        cin >> idRecipient;
 
         while(true)
         {
@@ -335,31 +669,31 @@ void editFriends(vector<Friend> &friends)
             cout << "3. Numer telefonu" << endl;
             cout << "4. Email" << endl;
             cout << "5. Adres" << endl;
-            cout << "6. Powrot do menu" << endl;
+            cout << "9. Powrot do menu" << endl;
             cout << endl << "Twoj wybor: " << endl;
             cin >> choice;
 
             if(choice == '1')
             {
-                editInformationAboutFriend(friends, idAddressee, 1);
+                editInformationAboutRecipient(recipients, idRecipient, 1);
             }
             else if (choice == '2')
             {
-                editInformationAboutFriend(friends, idAddressee, 2);
+                editInformationAboutRecipient(recipients, idRecipient, 2);
             }
             else if (choice == '3')
             {
-                editInformationAboutFriend(friends, idAddressee, 3);
+                editInformationAboutRecipient(recipients, idRecipient, 3);
             }
             else if (choice == '4')
             {
-                editInformationAboutFriend(friends, idAddressee, 4);
+                editInformationAboutRecipient(recipients, idRecipient, 4);
             }
             else if (choice == '5')
             {
-                editInformationAboutFriend(friends, idAddressee, 5);
+                editInformationAboutRecipient(recipients, idRecipient, 5);
             }
-            else if (choice == '6')
+            else if (choice == '9')
             {
                 break;
             }
@@ -373,48 +707,95 @@ void editFriends(vector<Friend> &friends)
 
 int main()
 {
-    vector<Friend> friends;
+    int idLoggedInUser = 0;
+    vector<User> users;
+    vector<Recipient> recipients;
     char choice;
+    bool recipientsDownloaded = false;
+    int idLastRecipient = 0;
 
-    downloadDataFromFile(friends);
+    downloadDataOfUsersFromFile(users);
 
     while(1)
     {
-        system("cls");
-        cout << "--- KSIAZKA ADRESOWA ---" << endl << endl;
-        cout << "1. Dodaj adresata" << endl;
-        cout << "2. Wyszukaj po imieniu" << endl;
-        cout << "3. Wyszukaj po nazwisku" << endl;
-        cout << "4. Wyswietl wszystkich adresatow" << endl;
-        cout << "5. Usun adresata" << endl;
-        cout << "6. Edytuj adresata" << endl;
-        cout << "9. Zakoncz program" << endl;
-        cout << endl << "Twoj wybor: " << endl;
-        cin >> choice;
-
-        switch (choice)
+        if(idLoggedInUser == 0)
         {
-        case '1':
-            addFriend(friends);
-            break;
-        case '2':
-            searchAfterTheFirstName(friends);
-            break;
-        case '3':
-            searchAfterTheLastName(friends);
-            break;
-        case '4':
-            displayAllFriendsDetails(friends);
-            break;
-        case '5':
-            deleteFriend(friends);
-            break;
-        case '6':
-            editFriends(friends);
-            break;
-        case '9':
-            exit(0);
+            recipientsDownloaded = false;
+            system("cls");
+            cout << "--- MENU GLOWNE ---" << endl << endl;
+            cout << "1. Logowanie" << endl;
+            cout << "2. Rejestracja" << endl;
+            cout << "9. Zamknij program" << endl;
+            cin >> choice;
+
+            switch (choice)
+            {
+            case '1':
+                idLoggedInUser = login(users);
+                break;
+            case '2':
+                registration(users);
+                break;
+            case '9':
+                exit(0);
+                break;
+            default:
+                cout << endl << "Nie ma takiej opcji w menu." << endl << endl;
+                system("pause");
+                break;
+            }
+        }
+        else
+        {
+
+            if(recipientsDownloaded == false)
+            {
+                recipients = downloadDataOfRecipientsFromFile(idLoggedInUser, idLastRecipient);
+                recipientsDownloaded = true;
+            }
+
+            system("cls");
+            cout << "--- MENU UZYTKOWNIKA ---" << endl << endl;
+            cout << "1. Dodaj adresata" << endl;
+            cout << "2. Wyszukaj po imieniu" << endl;
+            cout << "3. Wyszukaj po nazwisku" << endl;
+            cout << "4. Wyswietl wszystkich adresatow" << endl;
+            cout << "5. Usun adresata" << endl;
+            cout << "6. Edytuj adresata" << endl;
+            cout << "--------------------" << endl;
+            cout << "8. Zmiana hasla" << endl;
+            cout << "9. Wylogowanie" << endl;
+            cin >> choice;
+
+            switch (choice)
+            {
+            case '1':
+                idLastRecipient = addRecipient(recipients, idLoggedInUser, idLastRecipient);
+                break;
+            case '2':
+                searchAfterTheFirstName(recipients);
+                break;
+            case '3':
+                searchAfterTheLastName(recipients);
+                break;
+            case '4':
+                displayAllRecipientsDetails(recipients);
+                break;
+            case '5':
+                deleteRecipient(recipients);
+                break;
+            case '6':
+                editRecipients(recipients);
+                break;
+            case '8':
+                passwordChange(users, idLoggedInUser);
+                break;
+            case '9':
+                idLoggedInUser = 0;
+                break;
+            }
         }
     }
+
     return 0;
 }
