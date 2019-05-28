@@ -7,11 +7,35 @@
 	<vector>
 	<algorithm>
 
-<<<<<<< HEAD
-1558909453 source:d:\dokumenty\programowanie\przyszlyprogramista\seminaria\sem015_twoj_nowy_kolega_git\001_ksiazkaadresowa\main.cpp
-=======
-1558903054 source:d:\dokumenty\programowanie\przyszlyprogramista\seminaria\sem015_twoj_nowy_kolega_git\001_ksiazkaadresowa\main.cpp
->>>>>>> master
+1553861149 D
+
+1559681844 source:d:\dokumenty\programowanie\przyszlyprogramista\seminaria\sem015_twoj_nowy_kolega_git\001_ksiazkaadresowa\main.cpp
+	<iostream>
+	<fstream>
+	<windows.h>
+	<sstream>
+	<vector>
+	<algorithm>
+	"login.h"
+
+1558903054 ter
+	<iostream>
+	<fstream>
+	<windows.h>
+	<sstream>
+	<vector>
+	<algorithm>
+
+1559681844 source:d:\dokumenty\programowanie\przyszlyprogramista\seminaria\sem015_twoj_nowy_kolega_git\001_ksiazkaadresowa\login.cpp
+	<iostream>
+	<fstream>
+	<windows.h>
+	<sstream>
+	<vector>
+	<algorithm>
+	"login.h"
+
+1559681844 d:\dokumenty\programowanie\przyszlyprogramista\seminaria\sem015_twoj_nowy_kolega_git\001_ksiazkaadresowa\login.h
 	<iostream>
 	<fstream>
 	<windows.h>

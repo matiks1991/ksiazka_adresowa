@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include "login.h"
 
 using namespace std;
 
@@ -14,139 +15,6 @@ string loadLine()
     return input;
 }
 
-struct User
-{
-    int id = 0;
-    string name = "", password = "";
-};
-
-void overwriteFileUsers(vector<User> &users)
-{
-    fstream file;
-    file.open( "Uzytkownicy.txt", ios::out | ios::trunc );
-
-    if(file.good() == true)
-    {
-        for(int i=0; i<users.size(); i++)
-        {
-            file << users[i].id << "|";
-            file << users[i].name << "|";
-            file << users[i].password << "|"  << endl;
-        }
-        file.close();
-
-        cout << "Sukces!" << endl;
-        Sleep(1500);
-    }
-    else
-    {
-        cout << "Nie udalo sie przeprowadzic operacji!" << endl;
-        system("pause");
-    }
-}
-
-void registration(vector<User> &users)
-{
-    string name, password;
-    User templateUser;
-
-    cout << "Podaj nazwe uzytkownika: " << endl;
-    cin >> name;
-
-    int i = 0;
-    while(i < users.size())
-    {
-        if(users[i].name == name)
-        {
-            cout << "Taki uzytkownik istnieje. Wpisz inna nazwe uzytkownika.";
-            cin >> name;
-            i = 0;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    cout << "Podaj haslo: ";
-    cin >> password;
-
-    templateUser.name = name;
-    templateUser.password = password;
-    templateUser.id = users.size()+1;
-    users.push_back(templateUser);
-
-    fstream file;
-    file.open("Uzytkownicy.txt", ios::app);
-
-    if(file.good() == true)
-    {
-        file << templateUser.id << "|";
-        file << templateUser.name << "|";
-        file << templateUser.password << "|"  << endl;
-
-        file.close();
-
-        cout << "Konto zalozone." << endl;
-    }
-    else
-    {
-        cout << "Nie udalo sie dodac konta!" << endl;
-    }
-
-    Sleep(1500);
-}
-
-int login(vector<User> &users)
-{
-    string name, password;
-    int numberOfLine = 1;
-
-    cout << "Podaj login: ";
-    cin >> name;
-
-    for(int i = 0; i < users.size(); i++)
-    {
-        if(users[i].name == name)
-        {
-            for (int proby = 0; proby < 3; proby++)
-            {
-                cout << "Podaj haslo. Pozostalo prob " << 3-proby << ": ";
-                cin >> password;
-                if (users[i].password == password)
-                {
-                    cout << "Zalogowales sie." << endl;
-                    Sleep(500);
-                    return users[i].id;
-                }
-            }
-            cout << "Podales 3 razy bledna haslo. Poczekaj 3 sekundy przed kolejna proba" << endl;
-            Sleep(3000);
-            return 0;
-        }
-    }
-    cout << "Nie ma uzytkownika z takim loginem" << endl;
-    Sleep(1000);
-    return 0;
-}
-
-void passwordChange(vector<User> &users, int idLoggedInUser)
-{
-    string password;
-    cout << "Podaj nowe haslo: ";
-    cin >> password;
-
-
-    for(int i=0; i<users.size(); i++)
-    {
-        if(users[i].id == idLoggedInUser)
-        {
-            users[i].password = password;
-        }
-    }
-
-    overwriteFileUsers(users);
-}
-
 string changeFirstLetterToUpperAndRestToLower(string text)
 {
     if (!text.empty())
@@ -155,50 +23,6 @@ string changeFirstLetterToUpperAndRestToLower(string text)
         text[0] = toupper(text[0]);
     }
     return text;
-}
-
-void downloadDataOfUsersFromFile(vector<User> &users)
-{
-    string line;
-    int numberOfLine = 1;
-    User templateUser;
-
-    fstream file;
-    file.open("Uzytkownicy.txt", ios::in);
-
-    if(file.good() == true)
-    {
-        while (getline(file,line,'|'))
-        {
-            switch (numberOfLine)
-            {
-            case 1:
-                templateUser.id = atoi(line.c_str());
-                break;
-            case 2:
-                templateUser.name = line;
-                break;
-            case 3:
-                templateUser.password = line;
-                break;
-            }
-            if (numberOfLine >= 3)
-            {
-                numberOfLine = 1;
-                users.push_back(templateUser);
-            }
-            else
-            {
-                numberOfLine++;
-            }
-        }
-        file.close();
-    }
-    else
-    {
-        cout << "Nie udalo sie wczytac pliku uzytkownikow!" << endl;
-        system("pause");
-    }
 }
 
 struct Recipient
@@ -707,18 +531,18 @@ void editRecipients(vector<Recipient> &recipients)
 
 int main()
 {
-    int idLoggedInUser = 0;
-    vector<User> users;
     vector<Recipient> recipients;
     char choice;
     bool recipientsDownloaded = false;
     int idLastRecipient = 0;
 
-    downloadDataOfUsersFromFile(users);
+    MainInterface mainInterface;
+
+    mainInterface.downloadDataOfUsersFromFile();
 
     while(1)
     {
-        if(idLoggedInUser == 0)
+        if(mainInterface.idLoggedInUser == 0)
         {
             recipientsDownloaded = false;
             system("cls");
@@ -731,10 +555,10 @@ int main()
             switch (choice)
             {
             case '1':
-                idLoggedInUser = login(users);
+                mainInterface.idLoggedInUser = mainInterface.login();
                 break;
             case '2':
-                registration(users);
+                mainInterface.registration();
                 break;
             case '9':
                 exit(0);
@@ -747,10 +571,9 @@ int main()
         }
         else
         {
-
             if(recipientsDownloaded == false)
             {
-                recipients = downloadDataOfRecipientsFromFile(idLoggedInUser, idLastRecipient);
+                recipients = downloadDataOfRecipientsFromFile(mainInterface.idLoggedInUser, idLastRecipient);
                 recipientsDownloaded = true;
             }
 
@@ -770,7 +593,7 @@ int main()
             switch (choice)
             {
             case '1':
-                idLastRecipient = addRecipient(recipients, idLoggedInUser, idLastRecipient);
+                idLastRecipient = addRecipient(recipients, mainInterface.idLoggedInUser, idLastRecipient);
                 break;
             case '2':
                 searchAfterTheFirstName(recipients);
@@ -788,10 +611,10 @@ int main()
                 editRecipients(recipients);
                 break;
             case '8':
-                passwordChange(users, idLoggedInUser);
+                mainInterface.passwordChange();
                 break;
             case '9':
-                idLoggedInUser = 0;
+                mainInterface.idLoggedInUser = 0;
                 break;
             }
         }

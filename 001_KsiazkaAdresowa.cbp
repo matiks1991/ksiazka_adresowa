@@ -32,7 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="KsiazkaAdresowa.txt" />
+		<Unit filename="login.cpp" />
+		<Unit filename="login.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
